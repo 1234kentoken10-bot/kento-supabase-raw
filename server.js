@@ -7,7 +7,7 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.static('public'));
 
 // ============================================
-// 🔑 Supabase設定
+// 🔑 Supabase設定（あなたの情報に書き換え！）
 // ============================================
 const supabaseUrl = 'https://xcpxosnszghaklpqkvbe.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjcHhvc25zemdoYWtscHFrdmJlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MTExMTQ4MCwiZXhwIjoyMTA2Njg3NDgwfQ.GHvpIZjuRYL9uw4cuPwbqUz5HgnW9A4IwCZCB45jhiY';
@@ -21,13 +21,14 @@ app.get('/', (req, res) => {
 });
 
 // ============================================
-// コード保存（Base64エンコードで安全に保存）
+// コード保存（数値ID + Base64エンコード）
 // ============================================
 app.post('/save', async (req, res) => {
     const { code, title } = req.body;
     if (!code) return res.status(400).json({ error: 'コードが空です' });
 
-    const id = 'kento_' + Date.now() + '_' + Math.random().toString(36).substr(2, 4);
+    // 🔥 数値IDを生成（bigint対応！）
+    const id = Date.now() * 1000 + Math.floor(Math.random() * 1000);
 
     // 🔥 Base64エンコード（日本語対応！）
     const encodedCode = Buffer.from(code, 'utf8').toString('base64');
@@ -37,8 +38,8 @@ app.post('/save', async (req, res) => {
         .from('codes')
         .insert([{ 
             id: id, 
-            title: encodedTitle,   // ← Base64で保存
-            code: encodedCode      // ← Base64で保存
+            title: encodedTitle,
+            code: encodedCode
         }]);
 
     if (error) {
@@ -51,20 +52,22 @@ app.post('/save', async (req, res) => {
 });
 
 // ============================================
-// Raw取得（Base64デコードして返す）
+// Raw取得（Base64デコード）
 // ============================================
 app.get('/raw/:id', async (req, res) => {
+    const numericId = Number(req.params.id);
+
     const { data, error } = await supabase
         .from('codes')
         .select('code')
-        .eq('id', req.params.id)
+        .eq('id', numericId)
         .single();
 
     if (error || !data) {
         return res.status(404).send('-- コードが見つかりません --');
     }
 
-    // 🔥 Base64デコード（元の日本語に戻す！）
+    // 🔥 Base64デコード
     const decodedCode = Buffer.from(data.code, 'base64').toString('utf8');
 
     res.setHeader('Content-Type', 'text/plain');
@@ -72,7 +75,7 @@ app.get('/raw/:id', async (req, res) => {
 });
 
 // ============================================
-// 一覧（Base64デコードして返す）
+// 一覧（Base64デコード）
 // ============================================
 app.get('/list', async (req, res) => {
     const { data, error } = await supabase
@@ -82,7 +85,6 @@ app.get('/list', async (req, res) => {
 
     if (error) return res.status(500).json({ error: error.message });
 
-    // 🔥 タイトルをデコード
     const decodedList = (data || []).map(item => ({
         id: item.id,
         title: Buffer.from(item.title, 'base64').toString('utf8')
@@ -97,5 +99,5 @@ app.get('/list', async (req, res) => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🔥 Kento Raw 起動: http://localhost:${PORT}`);
-    console.log(`📊 データベース: Supabase（Base64エンコード対応）`);
+    console.log(`📊 データベース: Supabase（数値ID + Base64対応）`);
 });
