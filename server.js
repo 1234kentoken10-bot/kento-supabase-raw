@@ -9,7 +9,7 @@ app.use(express.static('public'));
 // ============================================
 // 🔑 Supabase設定（さっきメモしたやつを貼る！）
 // ============================================
-const supabaseUrl = 'https://xcpxosnszghaklpqkvbe.supabase.co/rest/v1/';
+const supabaseUrl = 'https://xcpxosnszghaklpqkvbe.supabase.co';
 const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjcHhvc25zemdoYWtscHFrdmJlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MTExMTQ4MCwiZXhwIjoyMTA2Njg3NDgwfQ.GHvpIZjuRYL9uw4cuPwbqUz5HgnW9A4IwCZCB45jhiY';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
