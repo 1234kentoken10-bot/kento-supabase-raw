@@ -7,10 +7,10 @@ app.use(express.json({ limit: '50mb' }));
 app.use(express.static('public'));
 
 // ============================================
-// 🔑 Supabase設定（さっきメモしたやつを貼る！）
+// 🔑 Supabase設定（あなたの情報に書き換え！）
 // ============================================
 const supabaseUrl = 'https://xcpxosnszghaklpqkvbe.supabase.co';
-const supabaseKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InhjcHhvc25zemdoYWtscHFrdmJlIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc5MTExMTQ4MCwiZXhwIjoyMTA2Njg3NDgwfQ.GHvpIZjuRYL9uw4cuPwbqUz5HgnW9A4IwCZCB45jhiY';
+const supabaseKey = 'あなたのservice_roleキー';
 const supabase = createClient(supabaseUrl, supabaseKey);
 
 // ============================================
@@ -34,8 +34,7 @@ app.post('/save', async (req, res) => {
         .insert([{ 
             id: id, 
             title: title || 'Untitled', 
-            code: code,
-            created: new Date().toISOString()
+            code: code
         }]);
 
     if (error) {
@@ -71,13 +70,16 @@ app.get('/raw/:id', async (req, res) => {
 app.get('/list', async (req, res) => {
     const { data, error } = await supabase
         .from('codes')
-        .select('id, title, created')
-        .order('created', { ascending: false });
+        .select('id, title')
+        .order('id', { ascending: false });
 
     if (error) return res.status(500).json({ error: error.message });
     res.json(data || []);
 });
 
+// ============================================
+// サーバー起動
+// ============================================
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
     console.log(`🔥 Kento Raw 起動: http://localhost:${PORT}`);
