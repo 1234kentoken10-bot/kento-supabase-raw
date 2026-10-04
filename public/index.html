@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Kento Raw</title>
+    <style>
+        body { background:#0a0a0a; color:#fff; font-family:sans-serif; padding:30px; }
+        .container { max-width:700px; margin:0 auto; background:#1a1a1a; padding:30px; border-radius:15px; border:2px solid #ff8c00; }
+        h1 { color:#ff8c00; text-align:center; }
+        input, textarea { width:100%; padding:12px; background:#0a0a0a; color:#fff; border:2px solid #2a2a2a; border-radius:10px; margin-bottom:10px; font-size:15px; outline:none; }
+        textarea { height:250px; color:#ff8c00; font-family:monospace; }
+        input:focus, textarea:focus { border-color:#ff8c00; }
+        button { width:100%; padding:14px; background:#ff8c00; color:#000; border:none; border-radius:10px; font-size:16px; font-weight:bold; cursor:pointer; }
+        button:hover { background:#ffa500; }
+        .result { background:#0a0a0a; padding:15px; border-radius:10px; margin-top:15px; display:none; border:1px solid #2a2a2a; }
+        .result.show { display:block; }
+        .url { color:#00cc00; word-break:break-all; font-family:monospace; font-size:14px; padding:10px; background:#000; border-radius:6px; }
+        .status { padding:10px; border-radius:8px; margin:10px 0; display:none; text-align:center; }
+        .status.show { display:block; }
+        .status.success { background:#004400; color:#00cc00; }
+        .status.error { background:#440000; color:#ff4444; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>🔥 Kento Raw</h1>
+    <p style="text-align:center;color:#666;">Supabase保存でデータは消えません！</p>
+    <input id="titleInput" placeholder="タイトル" value="Kento Script">
+    <textarea id="codeInput" placeholder="Luaコード">print("Hello Kento!")</textarea>
+    <button onclick="saveCode()">💾 保存してRawリンク生成</button>
+    <div id="status" class="status"></div>
+    <div id="result" class="result">
+        <div style="color:#00cc00;font-weight:bold;margin-bottom:8px;">✅ 保存成功！</div>
+        <div class="url" id="resultUrl"></div>
+        <button onclick="copyResult()" style="margin-top:10px;background:#0088cc;color:#fff;">📋 コピー</button>
+    </div>
+</div>
+<script>
+let currentResult = '';
+async function saveCode() {
+    const code = document.getElementById('codeInput').value;
+    const title = document.getElementById('titleInput').value;
+    const status = document.getElementById('status');
+    if (!code.trim()) { status.className='status show error'; status.textContent='⚠️ コードを入力'; return; }
+    status.className = 'status show'; status.textContent = '⏳ 保存中...';
+    try {
+        const res = await fetch('/save', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({code,title}) });
+        const data = await res.json();
+        if (data.success) {
+            currentResult = data.raw;
+            document.getElementById('resultUrl').textContent = data.raw;
+            document.getElementById('result').classList.add('show');
+            status.className = 'status show success'; status.textContent = '✅ 保存成功！';
+        } else {
+            status.className = 'status show error'; status.textContent = '❌ ' + data.error;
+        }
+    } catch(e) { status.className='status show error'; status.textContent='❌ ' + e.message; }
+}
+function copyResult() { navigator.clipboard.writeText(currentResult); alert('コピーしました！'); }
+</script>
+</body>
+</html>
