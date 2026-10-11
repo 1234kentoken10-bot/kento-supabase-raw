@@ -132,7 +132,7 @@
 
         <div class="option-row" style="flex-direction: column; align-items: stretch;">
             <label style="color:#666;font-size:12px;margin-bottom:5px;">📁 ファイル名を指定（任意）</label>
-            <input type="text" class="filename-input" id="filenameInput" placeholder="例: my-script（未指定なら自動生成）">
+            <input type="text" class="filename-input" id="filenameInput" placeholder="好きな数値を入力（未指定なら自動生成）">
         </div>
     </div>
 
@@ -186,9 +186,6 @@ document.getElementById('clearBtn').addEventListener('click', function() {
     }
 });
 
-// ============================================
-// 🔥 生成ボタン（改善版）
-// ============================================
 document.getElementById('generateBtn').addEventListener('click', async function() {
     const code = codeInput.value;
     const customId = document.getElementById('filenameInput').value.trim();
@@ -202,14 +199,13 @@ document.getElementById('generateBtn').addEventListener('click', async function(
     showStatus('⏳ 生成中...', 'info');
 
     try {
-        // customIdも送信！
         const res = await fetch('/save', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
             body: JSON.stringify({ 
                 code: code, 
                 title: customId || 'Kento Script',
-                customId: customId  // ← これがリンク名になる！
+                customId: customId
             })
         });
         const data = await res.json();
@@ -217,7 +213,6 @@ document.getElementById('generateBtn').addEventListener('click', async function(
         if (data.success) {
             const rawLink = data.raw;
             
-            // 🔥 loadstringで囲む場合、表示も囲んだ形にする！
             if (wrapLoadstring) {
                 currentResult = 'loadstring(game:HttpGet("' + rawLink + '"))()';
                 document.getElementById('resultUrl').textContent = currentResult;
@@ -246,7 +241,6 @@ document.getElementById('copyBtn').addEventListener('click', function() {
 document.getElementById('openBtn').addEventListener('click', function() {
     const url = document.getElementById('resultUrl').textContent;
     if (url) {
-        // loadstringの場合、URLだけ抽出して開く
         const match = url.match(/https?:\/\/[^\s"]+/);
         if (match) {
             window.open(match[0], '_blank');
