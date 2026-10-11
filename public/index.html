@@ -2,61 +2,380 @@
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
-    <title>Kento Raw</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kento RAW Generator</title>
     <style>
-        body { background:#0a0a0a; color:#fff; font-family:sans-serif; padding:30px; }
-        .container { max-width:700px; margin:0 auto; background:#1a1a1a; padding:30px; border-radius:15px; border:2px solid #ff8c00; }
-        h1 { color:#ff8c00; text-align:center; }
-        input, textarea { width:100%; padding:12px; background:#0a0a0a; color:#fff; border:2px solid #2a2a2a; border-radius:10px; margin-bottom:10px; font-size:15px; outline:none; }
-        textarea { height:250px; color:#ff8c00; font-family:monospace; }
-        input:focus, textarea:focus { border-color:#ff8c00; }
-        button { width:100%; padding:14px; background:#ff8c00; color:#000; border:none; border-radius:10px; font-size:16px; font-weight:bold; cursor:pointer; }
-        button:hover { background:#ffa500; }
-        .result { background:#0a0a0a; padding:15px; border-radius:10px; margin-top:15px; display:none; border:1px solid #2a2a2a; }
-        .result.show { display:block; }
-        .url { color:#00cc00; word-break:break-all; font-family:monospace; font-size:14px; padding:10px; background:#000; border-radius:6px; }
-        .status { padding:10px; border-radius:8px; margin:10px 0; display:none; text-align:center; }
-        .status.show { display:block; }
-        .status.success { background:#004400; color:#00cc00; }
-        .status.error { background:#440000; color:#ff4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #0a0a0a;
+            color: #fff;
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #1a1a1a;
+            border-radius: 15px;
+            border: 2px solid #ff8c00;
+        }
+        header h1 {
+            color: #ff8c00;
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+        header p {
+            color: #666;
+            font-size: 0.9rem;
+        }
+        .card {
+            background: #1a1a1a;
+            border-radius: 15px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 1px solid #2a2a2a;
+        }
+        .card-title {
+            color: #ff8c00;
+            font-size: 1.1rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        textarea {
+            width: 100%;
+            height: 250px;
+            background: #0a0a0a;
+            color: #ff8c00;
+            border: 2px solid #2a2a2a;
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Consolas', monospace;
+            font-size: 14px;
+            resize: vertical;
+            outline: none;
+            line-height: 1.6;
+        }
+        textarea:focus { border-color: #ff8c00; }
+        .char-count {
+            text-align: right;
+            color: #666;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        .btn-row {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        .btn-row button {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-paste { background: #2a2a2a; color: #fff; }
+        .btn-clear { background: #2a2a2a; color: #fff; }
+        .btn-paste:hover, .btn-clear:hover { background: #3a3a3a; }
+        .option-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+            padding: 12px;
+            background: #0a0a0a;
+            border-radius: 8px;
+            border: 1px solid #2a2a2a;
+        }
+        .option-row input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #ff8c00;
+            cursor: pointer;
+        }
+        .option-row label {
+            color: #ccc;
+            font-size: 14px;
+            cursor: pointer;
+        }
+        .filename-input {
+            width: 100%;
+            padding: 12px;
+            background: #0a0a0a;
+            color: #fff;
+            border: 2px solid #2a2a2a;
+            border-radius: 8px;
+            font-size: 14px;
+            outline: none;
+            margin-top: 8px;
+        }
+        .filename-input:focus { border-color: #ff8c00; }
+        .generate-btn {
+            width: 100%;
+            padding: 16px;
+            background: #ff8c00;
+            color: #0a0a0a;
+            border: none;
+            border-radius: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+        .generate-btn:hover {
+            background: #ffa500;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
+        }
+        .result {
+            background: #0a0a0a;
+            border-radius: 10px;
+            padding: 20px;
+            display: none;
+            border: 1px solid #2a2a2a;
+            margin-top: 15px;
+        }
+        .result.show { display: block; }
+        .result-header {
+            color: #00cc00;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .url {
+            color: #00cc00;
+            word-break: break-all;
+            font-family: monospace;
+            font-size: 13px;
+            padding: 12px;
+            background: #000;
+            border-radius: 6px;
+            margin-bottom: 10px;
+        }
+        .result-actions {
+            display: flex;
+            gap: 10px;
+        }
+        .result-actions button {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        .btn-copy { background: #ff8c00; color: #0a0a0a; }
+        .btn-open { background: #0088cc; color: #fff; }
+        .status {
+            padding: 12px;
+            border-radius: 8px;
+            margin-top: 15px;
+            display: none;
+            text-align: center;
+            font-size: 14px;
+        }
+        .status.show { display: block; }
+        .status.success { background: #004400; color: #00cc00; }
+        .status.error { background: #440000; color: #ff4444; }
+        .footer {
+            text-align: center;
+            color: #333;
+            font-size: 12px;
+            margin-top: 30px;
+            padding: 20px;
+        }
+        @media (max-width: 600px) {
+            header h1 { font-size: 1.5rem; }
+            .card { padding: 15px; }
+        }
     </style>
 </head>
 <body>
+
 <div class="container">
-    <h1>🔥 Kento Raw</h1>
-    <p style="text-align:center;color:#666;">Supabase保存でデータは消えません！</p>
-    <input id="titleInput" placeholder="タイトル" value="Kento Script">
-    <textarea id="codeInput" placeholder="Luaコード">print("Hello Kento!")</textarea>
-    <button onclick="saveCode()">💾 保存してRawリンク生成</button>
-    <div id="status" class="status"></div>
-    <div id="result" class="result">
-        <div style="color:#00cc00;font-weight:bold;margin-bottom:8px;">✅ 保存成功！</div>
+    <header>
+        <h1>🔥 Kento RAW Generator</h1>
+        <p>L');
+uaやテキストをRaw形式で扱うジェネレーター</p>
+    </header>
+
+    <!-- INPUT -->
+    <div class="       card">
+        <div class="card-title"> status📝 INPUT</div>
+        <textarea id="codeInput" placeholder="コード /.class テキストを入力...">print("Hello KentoName!")</textarea>
+        <div = class="char-count"><span id="charCount">0</span> 文字</div>
+        <div class="btn-row">
+            <button class="btn-paste" onclick="pasteFromClipboard()">📋 貼り付け</button>
+            <button class="btn-clear" onclick="clearInput()">🗑 クリア</button>
+        </div>
+    </div>
+
+    <!-- OPTIONS -->
+    <div class="card">
+        <div class="card-title">⚙️ OPTIONS</div>
+        
+        <div class="option-row">
+            <input type="checkbox" id="wrapLoadstring">
+            <label for="wrapLoadstring">loadstring(game:HttpGet(""))() で囲う</label>
+        </div>
+
+        <div class="option-row" style="flex-direction: column; align-items: stretch;">
+            <label style="color:#666;font-size:12px;margin-bottom:5px;">📁 ファイル名を指定（任意）</label>
+            <input type="text" class="filename-input" id="filenameInput" placeholder="例: my-script（未指定なら自動生成）">
+        </div>
+    </div>
+
+    <!-- GENERATE -->
+    <button class="generate-btn" onclick="generateRaw()">✨ RAWを生成する</button>
+
+    <!-- RESULT -->
+    <div class="result" id="result">
+        <div class="result-header">✅ 生成完了</div>
+        <p style="color:#666;font-size:13px;margin-bottom:10px;">生成したRawリンクです。コピーして利用できます。</p>
         <div class="url" id="resultUrl"></div>
-        <button onclick="copyResult()" style="margin-top:10px;background:#0088cc;color:#fff;">📋 コピー</button>
+        <div class="result-actions">
+            <button class="btn-copy" onclick="copyResult()">📋 コピー</button>
+            <button class="btn-open" onclick="openResult()">↗ Rawを開く</button>
+        </div>
+    </div>
+
+    <div id="status" class="status"></div>
+
+    <div class="footer">
+        🔥 Kento RAW Generator · Supabase保存でデータは消えません
     </div>
 </div>
+
 <script>
 let currentResult = '';
-async function saveCode() {
-    const code = document.getElementById('codeInput').value;
-    const title = document.getElementById('titleInput').value;
-    const status = document.getElementById('status');
-    if (!code.trim()) { status.className='status show error'; status.textContent='⚠️ コードを入力'; return; }
-    status.className = 'status show'; status.textContent = '⏳ 保存中...';
+const codeInput = document.getElementById('codeInput');
+const charCount = document.getElementById('charCount');
+
+// ============================================
+// 文字数カウント
+// ============================================
+codeInput.addEventListener('input', () => {
+    charCount.textContent = codeInput.value.length;
+});
+
+// ============================================
+// 貼り付け
+// ============================================
+async function pasteFromClipboard() {
     try {
-        const res = await fetch('/save', { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify({code,title}) });
-        const data = await res.json();
-        if (data.success) {
-            currentResult = data.raw;
-            document.getElementById('resultUrl').textContent = data.raw;
-            document.getElementById('result').classList.add('show');
-            status.className = 'status show success'; status.textContent = '✅ 保存成功！';
-        } else {
-            status.className = 'status show error'; status.textContent = '❌ ' + data.error;
-        }
-    } catch(e) { status.className='status show error'; status.textContent='❌ ' + e.message; }
+        const text = await navigator.clipboard.readText();
+        codeInput.value = text;
+        codeInput.dispatchEvent(new Event('input'));
+    } catch (e) {
+        alert('クリップボードを読み取れませんでした');
+    }
 }
-function copyResult() { navigator.clipboard.writeText(currentResult); alert('コピーしました！'); }
+
+// ============================================
+// クリア
+// ============================================
+function clearInput() {
+    if (confirm('クリアしますか？')) {
+        codeInput.value = '';
+        codeInput.dispatchEvent(new Event('input'));
+        document.getElementById('result').classList.remove('show');
+        document.getElementById('status').className = 'status';
+    }
+}
+
+// ============================================
+// Raw生成
+// ============================================
+async function generateRaw() {
+    const code = codeInput.value;
+    const title = document.getElementById('filenameInput').value.trim() || 'Kento Script';
+    const wrapLoadstring = document.getElementById('wrapLoadstring').checked;
+    const status = document.getElementById('status');
+
+    if (!code.trim()) {
+        status.className = 'status show error';
+        status.textContent = '⚠️ コードを入力してください';
+        return;
+    }
+
+    status.className = 'status show';
+    status.textContent = '⏳ 生成中...';
+
+    try {
+        // 保存
+        const res = await fetch('/save', {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({ code, title })
+        });
+        const data = await res.json();
+
+        if (data.success) {
+            let rawLink = data.raw;
+
+            // loadstringで囲う場合
+            if (wrapLoadstring) {
+                // 表示用はそのまま、コピー用にloadstringを用意
+                currentResult = `loadstring(game:HttpGet("${rawLink}"))()`;
+            } else {
+                currentResult = rawLink;
+            }
+
+            document.getElementById('resultUrl').textContent = rawLink;
+            document.getElementById('result').classList.add('show');
+            status.className = 'status show success';
+            status.textContent = '✅ 生成完了！';
+        } else {
+            status.className = 'status show error';
+            status.textContent = '❌ ' + data.error;
+        }
+    } catch(e) {
+        status.className = 'status show error';
+        status.textContent = '❌ ' + e.message;
+    }
+}
+
+// ============================================
+// コピー
+// ============================================
+function copyResult() {
+    if (currentResult) {
+        navigator.clipboard.writeText(currentResult);
+        const status = document.getElementById('status 'status show success';
+        status.textContent = '✅ コピーしました！';
+    }
+}
+
+// ============================================
+// Rawを開く
+// ============================================
+function openResult() {
+    const url = document.getElementById('resultUrl').textContent;
+    if (url) window.open(url, '_blank');
+}
+
+// ============================================
+// Ctrl + Enter で生成
+// ============================================
+document.addEventListener('keydown', (e) => {
+    if (e.ctrlKey && e.key === 'Enter') {
+        generateRaw();
+    }
+});
+
+// 初期化
+charCount.textContent = codeInput.value.length;
 </script>
+
 </body>
 </html>
