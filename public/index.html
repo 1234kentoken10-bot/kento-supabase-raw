@@ -13,10 +13,7 @@
             min-height: 100vh;
             padding: 20px;
         }
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-        }
+        .container { max-width: 800px; margin: 0 auto; }
         header {
             text-align: center;
             margin-bottom: 30px;
@@ -25,15 +22,8 @@
             border-radius: 15px;
             border: 2px solid #ff8c00;
         }
-        header h1 {
-            color: #ff8c00;
-            font-size: 2rem;
-            margin-bottom: 5px;
-        }
-        header p {
-            color: #666;
-            font-size: 0.9rem;
-        }
+        header h1 { color: #ff8c00; font-size: 2rem; margin-bottom: 5px; }
+        header p { color: #666; font-size: 0.9rem; }
         .card {
             background: #1a1a1a;
             border-radius: 15px;
@@ -41,11 +31,7 @@
             margin-bottom: 20px;
             border: 1px solid #2a2a2a;
         }
-        .card-title {
-            color: #ff8c00;
-            font-size: 1.1rem;
-            margin-bottom: 15px;
-        }
+        .card-title { color: #ff8c00; font-size: 1.1rem; margin-bottom: 15px; }
         textarea {
             width: 100%;
             height: 250px;
@@ -61,134 +47,61 @@
             line-height: 1.6;
         }
         textarea:focus { border-color: #ff8c00; }
-        .char-count {
-            text-align: right;
-            color: #666;
-            font-size: 12px;
-            margin-top: 5px;
-        }
-        .btn-row {
-            display: flex;
-            gap: 10px;
-            margin-top: 10px;
-        }
+        .char-count { text-align: right; color: #666; font-size: 12px; margin-top: 5px; }
+        .btn-row { display: flex; gap: 10px; margin-top: 10px; }
         .btn-row button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
-            font-weight: bold;
-            cursor: pointer;
-            background: #2a2a2a;
-            color: #fff;
+            flex: 1; padding: 12px; border: none; border-radius: 8px;
+            font-size: 14px; font-weight: bold; cursor: pointer;
+            background: #2a2a2a; color: #fff;
         }
         .btn-row button:hover { background: #3a3a3a; }
         .option-row {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 15px;
-            padding: 12px;
-            background: #0a0a0a;
-            border-radius: 8px;
-            border: 1px solid #2a2a2a;
+            display: flex; align-items: center; gap: 10px;
+            margin-bottom: 15px; padding: 12px;
+            background: #0a0a0a; border-radius: 8px; border: 1px solid #2a2a2a;
         }
         .option-row input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: #ff8c00;
-            cursor: pointer;
+            width: 20px; height: 20px; accent-color: #ff8c00; cursor: pointer;
         }
-        .option-row label {
-            color: #ccc;
-            font-size: 14px;
-            cursor: pointer;
-        }
+        .option-row label { color: #ccc; font-size: 14px; cursor: pointer; }
         .filename-input {
-            width: 100%;
-            padding: 12px;
-            background: #0a0a0a;
-            color: #fff;
-            border: 2px solid #2a2a2a;
-            border-radius: 8px;
-            font-size: 14px;
-            outline: none;
-            margin-top: 8px;
+            width: 100%; padding: 12px; background: #0a0a0a; color: #fff;
+            border: 2px solid #2a2a2a; border-radius: 8px; font-size: 14px;
+            outline: none; margin-top: 8px;
         }
         .filename-input:focus { border-color: #ff8c00; }
         .generate-btn {
-            width: 100%;
-            padding: 16px;
-            background: #ff8c00;
-            color: #0a0a0a;
-            border: none;
-            border-radius: 10px;
-            font-size: 16px;
-            font-weight: bold;
-            cursor: pointer;
-            transition: 0.3s;
+            width: 100%; padding: 16px; background: #ff8c00; color: #0a0a0a;
+            border: none; border-radius: 10px; font-size: 16px;
+            font-weight: bold; cursor: pointer; transition: 0.3s;
         }
-        .generate-btn:hover {
-            background: #ffa500;
-        }
+        .generate-btn:hover { background: #ffa500; }
         .result {
-            background: #0a0a0a;
-            border-radius: 10px;
-            padding: 20px;
-            display: none;
-            border: 1px solid #2a2a2a;
-            margin-top: 15px;
+            background: #0a0a0a; border-radius: 10px; padding: 20px;
+            display: none; border: 1px solid #2a2a2a; margin-top: 15px;
         }
         .result.show { display: block; }
-        .result-header {
-            color: #00cc00;
-            font-weight: bold;
-            margin-bottom: 10px;
-        }
+        .result-header { color: #00cc00; font-weight: bold; margin-bottom: 10px; }
         .url {
-            color: #00cc00;
-            word-break: break-all;
-            font-family: monospace;
-            font-size: 13px;
-            padding: 12px;
-            background: #000;
-            border-radius: 6px;
-            margin-bottom: 10px;
+            color: #00cc00; word-break: break-all; font-family: monospace;
+            font-size: 13px; padding: 12px; background: #000;
+            border-radius: 6px; margin-bottom: 10px;
         }
-        .result-actions {
-            display: flex;
-            gap: 10px;
-        }
+        .result-actions { display: flex; gap: 10px; }
         .result-actions button {
-            flex: 1;
-            padding: 12px;
-            border: none;
-            border-radius: 8px;
-            font-size : 14px;
-            font-weight: bold;
-            cursor: pointer;
+            flex: 1; padding: 12px; border: none; border-radius: 8px;
+            font-size: 14px; font-weight: bold; cursor: pointer;
         }
         .btn-copy { background: #ff8c00; color: #0a0a0a; }
         .btn-open { background: #0088cc; color: #fff; }
         .status {
-            padding: 12px;
-            border-radius: 8px;
-            margin-top:15px;
-            display: none;
-            text-align: center;
-            font-size: 14px;
+            padding: 12px; border-radius: 8px; margin-top: 15px;
+            display: none; text-align: center; font-size: 14px;
         }
         .status.show { display: block; }
         .status.success { background: #004400; color: #00cc00; }
         .status.error { background: #440000; color: #ff4444; }
-        .footer {
-            text-align: center;
-            color: #333;
-            font-size: 12px;
-            margin-top: 30px;
-            padding: 20px;
-        }
+        .footer { text-align: center; color: #333; font-size: 12px; margin-top: 30px; padding: 20px; }
     </style>
 </head>
 <body>
@@ -199,7 +112,6 @@
         <p>LuaやテキストをRaw形式で扱うジェネレーター</p>
     </header>
 
-    <!-- INPUT -->
     <div class="card">
         <div class="card-title">📝 INPUT</div>
         <textarea id="codeInput" placeholder="コード / テキストを入力...">print("Hello Kento!")</textarea>
@@ -210,7 +122,6 @@
         </div>
     </div>
 
-    <!-- OPTIONS -->
     <div class="card">
         <div class="card-title">⚙️ OPTIONS</div>
         
@@ -225,10 +136,8 @@
         </div>
     </div>
 
-    <!-- GENERATE -->
     <button class="generate-btn" id="generateBtn">✨ RAWを生成する</button>
 
-    <!-- RESULT -->
     <div class="result" id="result">
         <div class="result-header">✅ 生成完了</div>
         <p style="color:#666;font-size:13px;margin-bottom:10px;">生成したRawリンクです。コピーして利用できます。</p>
@@ -247,25 +156,16 @@
 </div>
 
 <script>
-// ============================================
-// 変数
-// ============================================
 let currentResult = '';
 const codeInput = document.getElementById('codeInput');
 const charCount = document.getElementById('charCount');
 const statusEl = document.getElementById('status');
 const resultEl = document.getElementById('result');
 
-// ============================================
-// 文字数カウント
-// ============================================
 codeInput.addEventListener('input', function() {
     charCount.textContent = codeInput.value.length;
 });
 
-// ============================================
-// 貼り付けボタン
-// ============================================
 document.getElementById('pasteBtn').addEventListener('click', async function() {
     try {
         const text = await navigator.clipboard.readText();
@@ -277,9 +177,6 @@ document.getElementById('pasteBtn').addEventListener('click', async function() {
     }
 });
 
-// ============================================
-// クリアボタン
-// ============================================
 document.getElementById('clearBtn').addEventListener('click', function() {
     if (confirm('クリアしますか？')) {
         codeInput.value = '';
@@ -290,11 +187,11 @@ document.getElementById('clearBtn').addEventListener('click', function() {
 });
 
 // ============================================
-// 生成ボタン
+// 🔥 生成ボタン（改善版）
 // ============================================
 document.getElementById('generateBtn').addEventListener('click', async function() {
     const code = codeInput.value;
-    const title = document.getElementById('filenameInput').value.trim() || 'Kento Script';
+    const customId = document.getElementById('filenameInput').value.trim();
     const wrapLoadstring = document.getElementById('wrapLoadstring').checked;
 
     if (!code.trim()) {
@@ -305,23 +202,30 @@ document.getElementById('generateBtn').addEventListener('click', async function(
     showStatus('⏳ 生成中...', 'info');
 
     try {
+        // customIdも送信！
         const res = await fetch('/save', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
-            body: JSON.stringify({ code, title })
+            body: JSON.stringify({ 
+                code: code, 
+                title: customId || 'Kento Script',
+                customId: customId  // ← これがリンク名になる！
+            })
         });
         const data = await res.json();
 
         if (data.success) {
-            let rawLink = data.raw;
+            const rawLink = data.raw;
             
+            // 🔥 loadstringで囲む場合、表示も囲んだ形にする！
             if (wrapLoadstring) {
                 currentResult = 'loadstring(game:HttpGet("' + rawLink + '"))()';
+                document.getElementById('resultUrl').textContent = currentResult;
             } else {
                 currentResult = rawLink;
+                document.getElementById('resultUrl').textContent = rawLink;
             }
 
-            document.getElementById('resultUrl').textContent = rawLink;
             resultEl.classList.add('show');
             showStatus('✅ 生成完了！', 'success');
         } else {
@@ -332,9 +236,6 @@ document.getElementById('generateBtn').addEventListener('click', async function(
     }
 });
 
-// ============================================
-// コピーボタン
-// ============================================
 document.getElementById('copyBtn').addEventListener('click', function() {
     if (currentResult) {
         navigator.clipboard.writeText(currentResult);
@@ -342,17 +243,19 @@ document.getElementById('copyBtn').addEventListener('click', function() {
     }
 });
 
-// ============================================
-// Rawを開くボタン
-// ============================================
 document.getElementById('openBtn').addEventListener('click', function() {
     const url = document.getElementById('resultUrl').textContent;
-    if (url) window.open(url, '_blank');
+    if (url) {
+        // loadstringの場合、URLだけ抽出して開く
+        const match = url.match(/https?:\/\/[^\s"]+/);
+        if (match) {
+            window.open(match[0], '_blank');
+        } else {
+            window.open(url, '_blank');
+        }
+    }
 });
 
-// ============================================
-// ステータス表示
-// ============================================
 function showStatus(msg, type) {
     statusEl.textContent = msg;
     statusEl.className = 'status show ' + type;
@@ -363,16 +266,12 @@ function showStatus(msg, type) {
     }, 3000);
 }
 
-// ============================================
-// Ctrl + Enter で生成
-// ============================================
 document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.key === 'Enter') {
         document.getElementById('generateBtn').click();
     }
 });
 
-// 初期化
 charCount.textContent = codeInput.value.length;
 </script>
 
