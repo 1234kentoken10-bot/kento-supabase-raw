@@ -45,9 +45,6 @@
             color: #ff8c00;
             font-size: 1.1rem;
             margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
         }
         textarea {
             width: 100%;
@@ -77,16 +74,16 @@
         }
         .btn-row button {
             flex: 1;
-            padding: 10px;
+            padding: 12px;
             border: none;
             border-radius: 8px;
             font-size: 14px;
             font-weight: bold;
             cursor: pointer;
+            background: #2a2a2a;
+            color: #fff;
         }
-        .btn-paste { background: #2a2a2a; color: #fff; }
-        .btn-clear { background: #2a2a2a; color: #fff; }
-        .btn-paste:hover, .btn-clear:hover { background: #3a3a3a; }
+        .btn-row button:hover { background: #3a3a3a; }
         .option-row {
             display: flex;
             align-items: center;
@@ -134,8 +131,6 @@
         }
         .generate-btn:hover {
             background: #ffa500;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 20px rgba(255, 140, 0, 0.3);
         }
         .result {
             background: #0a0a0a;
@@ -170,7 +165,7 @@
             padding: 12px;
             border: none;
             border-radius: 8px;
-            font-size: 14px;
+            font-size : 14px;
             font-weight: bold;
             cursor: pointer;
         }
@@ -179,7 +174,7 @@
         .status {
             padding: 12px;
             border-radius: 8px;
-            margin-top: 15px;
+            margin-top:15px;
             display: none;
             text-align: center;
             font-size: 14px;
@@ -194,10 +189,6 @@
             margin-top: 30px;
             padding: 20px;
         }
-        @media (max-width: 600px) {
-            header h1 { font-size: 1.5rem; }
-            .card { padding: 15px; }
-        }
     </style>
 </head>
 <body>
@@ -205,18 +196,17 @@
 <div class="container">
     <header>
         <h1>🔥 Kento RAW Generator</h1>
-        <p>L');
-uaやテキストをRaw形式で扱うジェネレーター</p>
+        <p>LuaやテキストをRaw形式で扱うジェネレーター</p>
     </header>
 
     <!-- INPUT -->
-    <div class="       card">
-        <div class="card-title"> status📝 INPUT</div>
-        <textarea id="codeInput" placeholder="コード /.class テキストを入力...">print("Hello KentoName!")</textarea>
-        <div = class="char-count"><span id="charCount">0</span> 文字</div>
+    <div class="card">
+        <div class="card-title">📝 INPUT</div>
+        <textarea id="codeInput" placeholder="コード / テキストを入力...">print("Hello Kento!")</textarea>
+        <div class="char-count"><span id="charCount">0</span> 文字</div>
         <div class="btn-row">
-            <button class="btn-paste" onclick="pasteFromClipboard()">📋 貼り付け</button>
-            <button class="btn-clear" onclick="clearInput()">🗑 クリア</button>
+            <button id="pasteBtn">📋 貼り付け</button>
+            <button id="clearBtn">🗑 クリア</button>
         </div>
     </div>
 
@@ -236,7 +226,7 @@ uaやテキストをRaw形式で扱うジェネレーター</p>
     </div>
 
     <!-- GENERATE -->
-    <button class="generate-btn" onclick="generateRaw()">✨ RAWを生成する</button>
+    <button class="generate-btn" id="generateBtn">✨ RAWを生成する</button>
 
     <!-- RESULT -->
     <div class="result" id="result">
@@ -244,8 +234,8 @@ uaやテキストをRaw形式で扱うジェネレーター</p>
         <p style="color:#666;font-size:13px;margin-bottom:10px;">生成したRawリンクです。コピーして利用できます。</p>
         <div class="url" id="resultUrl"></div>
         <div class="result-actions">
-            <button class="btn-copy" onclick="copyResult()">📋 コピー</button>
-            <button class="btn-open" onclick="openResult()">↗ Rawを開く</button>
+            <button class="btn-copy" id="copyBtn">📋 コピー</button>
+            <button class="btn-open" id="openBtn">↗ Rawを開く</button>
         </div>
     </div>
 
@@ -257,62 +247,64 @@ uaやテキストをRaw形式で扱うジェネレーター</p>
 </div>
 
 <script>
+// ============================================
+// 変数
+// ============================================
 let currentResult = '';
 const codeInput = document.getElementById('codeInput');
 const charCount = document.getElementById('charCount');
+const statusEl = document.getElementById('status');
+const resultEl = document.getElementById('result');
 
 // ============================================
 // 文字数カウント
 // ============================================
-codeInput.addEventListener('input', () => {
+codeInput.addEventListener('input', function() {
     charCount.textContent = codeInput.value.length;
 });
 
 // ============================================
-// 貼り付け
+// 貼り付けボタン
 // ============================================
-async function pasteFromClipboard() {
+document.getElementById('pasteBtn').addEventListener('click', async function() {
     try {
         const text = await navigator.clipboard.readText();
         codeInput.value = text;
-        codeInput.dispatchEvent(new Event('input'));
+        charCount.textContent = text.length;
+        showStatus('✅ 貼り付けました', 'success');
     } catch (e) {
-        alert('クリップボードを読み取れませんでした');
+        showStatus('❌ 貼り付けできません。手動で貼り付けてください', 'error');
     }
-}
+});
 
 // ============================================
-// クリア
+// クリアボタン
 // ============================================
-function clearInput() {
+document.getElementById('clearBtn').addEventListener('click', function() {
     if (confirm('クリアしますか？')) {
         codeInput.value = '';
-        codeInput.dispatchEvent(new Event('input'));
-        document.getElementById('result').classList.remove('show');
-        document.getElementById('status').className = 'status';
+        charCount.textContent = '0';
+        resultEl.classList.remove('show');
+        statusEl.className = 'status';
     }
-}
+});
 
 // ============================================
-// Raw生成
+// 生成ボタン
 // ============================================
-async function generateRaw() {
+document.getElementById('generateBtn').addEventListener('click', async function() {
     const code = codeInput.value;
     const title = document.getElementById('filenameInput').value.trim() || 'Kento Script';
     const wrapLoadstring = document.getElementById('wrapLoadstring').checked;
-    const status = document.getElementById('status');
 
     if (!code.trim()) {
-        status.className = 'status show error';
-        status.textContent = '⚠️ コードを入力してください';
+        showStatus('⚠️ コードを入力してください', 'error');
         return;
     }
 
-    status.className = 'status show';
-    status.textContent = '⏳ 生成中...';
+    showStatus('⏳ 生成中...', 'info');
 
     try {
-        // 保存
         const res = await fetch('/save', {
             method: 'POST',
             headers: {'Content-Type': 'application/json'},
@@ -322,54 +314,61 @@ async function generateRaw() {
 
         if (data.success) {
             let rawLink = data.raw;
-
-            // loadstringで囲う場合
+            
             if (wrapLoadstring) {
-                // 表示用はそのまま、コピー用にloadstringを用意
-                currentResult = `loadstring(game:HttpGet("${rawLink}"))()`;
+                currentResult = 'loadstring(game:HttpGet("' + rawLink + '"))()';
             } else {
                 currentResult = rawLink;
             }
 
             document.getElementById('resultUrl').textContent = rawLink;
-            document.getElementById('result').classList.add('show');
-            status.className = 'status show success';
-            status.textContent = '✅ 生成完了！';
+            resultEl.classList.add('show');
+            showStatus('✅ 生成完了！', 'success');
         } else {
-            status.className = 'status show error';
-            status.textContent = '❌ ' + data.error;
+            showStatus('❌ ' + data.error, 'error');
         }
     } catch(e) {
-        status.className = 'status show error';
-        status.textContent = '❌ ' + e.message;
+        showStatus('❌ ' + e.message, 'error');
     }
-}
+});
 
 // ============================================
-// コピー
+// コピーボタン
 // ============================================
-function copyResult() {
+document.getElementById('copyBtn').addEventListener('click', function() {
     if (currentResult) {
         navigator.clipboard.writeText(currentResult);
-        const status = document.getElementById('status 'status show success';
-        status.textContent = '✅ コピーしました！';
+        showStatus('✅ コピーしました！', 'success');
     }
-}
+});
 
 // ============================================
-// Rawを開く
+// Rawを開くボタン
 // ============================================
-function openResult() {
+document.getElementById('openBtn').addEventListener('click', function() {
     const url = document.getElementById('resultUrl').textContent;
     if (url) window.open(url, '_blank');
+});
+
+// ============================================
+// ステータス表示
+// ============================================
+function showStatus(msg, type) {
+    statusEl.textContent = msg;
+    statusEl.className = 'status show ' + type;
+    setTimeout(function() {
+        if (statusEl.className.includes('show')) {
+            statusEl.className = 'status';
+        }
+    }, 3000);
 }
 
 // ============================================
 // Ctrl + Enter で生成
 // ============================================
-document.addEventListener('keydown', (e) => {
+document.addEventListener('keydown', function(e) {
     if (e.ctrlKey && e.key === 'Enter') {
-        generateRaw();
+        document.getElementById('generateBtn').click();
     }
 });
 
