@@ -64,13 +64,15 @@ app.get('/raw/:id', async (req, res) => {
     const userAgent = (req.headers['user-agent'] || '').toLowerCase();
 
     // 🛡️ ブラウザからのアクセスをブロック
-    const isBrowser = userAgent.includes('mozilla') || 
-                      userAgent.includes('chrome') || 
-                      userAgent.includes('safari') || 
-                      userAgent.includes('firefox') || 
-                      userAgent.includes('edg');
+    // RobloxのエグゼキューターはUser-Agentに 'roblox' や 'wininet' などを含むことが多いです。
+    // 逆に、Safari/Chromeなどのブラウザ特有の文字列が含まれている場合のみブロックします。
+    const isStrictBrowser = 
+        userAgent.includes('mozilla/5.0') && 
+        (userAgent.includes('chrome') || userAgent.includes('safari') || userAgent.includes('firefox') || userAgent.includes('edg')) &&
+        !userAgent.includes('roblox') && 
+        !userAgent.includes('wininet');
 
-    if (isBrowser) {
+    if (isStrictBrowser) {
         return res.status(403).send(`
             <body style="background:#111; color:#ff4444; font-family:sans-serif; text-align:center; padding-top:100px;">
                 <h1>Contents can not be displayed on browser.</h1>
