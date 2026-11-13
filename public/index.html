@@ -130,9 +130,15 @@
             <label for="wrapLoadstring">loadstring(game:HttpGet(""))() で囲う</label>
         </div>
 
+        <!-- ✨ 新設：隠すか隠さないかの設定 -->
+        <div class="option-row" style="border-color: #ff4444; background: #220000;">
+            <input type="checkbox" id="hideFromBrowser" checked style="accent-color: #ff4444;">
+            <label for="hideFromBrowser" style="color: #ff8888; font-weight: bold;">ブラウザからコードを隠す（推奨）</label>
+        </div>
+
         <div class="option-row" style="flex-direction: column; align-items: stretch;">
-            <label style="color:#666;font-size:12px;margin-bottom:5px;">📁 ファイル名を指定（任意）</label>
-            <input type="text" class="filename-input" id="filenameInput" placeholder="好きな数値を入力（8文字まで）">
+            <label style="color:#666;font-size:12px;margin-bottom:5px;">📁 ファイル名を指定（任意・半角英数字）</label>
+            <input type="text" class="filename-input" id="filenameInput" placeholder="好きな名前を入力（未指定なら自動生成）">
         </div>
     </div>
 
@@ -140,7 +146,6 @@
 
     <div class="result" id="result">
         <div class="result-header">✅ 生成完了</div>
-        <p style="color:#666;font-size:13px;margin-bottom:10px;">生成したRawリンクです。コピーして利用できます。</p>
         <div class="url" id="resultUrl"></div>
         <div class="result-actions">
             <button class="btn-copy" id="copyBtn">📋 コピー</button>
@@ -190,6 +195,7 @@ document.getElementById('generateBtn').addEventListener('click', async function(
     const code = codeInput.value;
     const customId = document.getElementById('filenameInput').value.trim();
     const wrapLoadstring = document.getElementById('wrapLoadstring').checked;
+    const hideFromBrowser = document.getElementById('hideFromBrowser').checked; // 隠すかどうかの取得
 
     if (!code.trim()) {
         showStatus('⚠️ コードを入力してください', 'error');
@@ -205,7 +211,8 @@ document.getElementById('generateBtn').addEventListener('click', async function(
             body: JSON.stringify({ 
                 code: code, 
                 title: customId || 'Kento Script',
-                customId: customId
+                customId: customId,
+                hideFromBrowser: hideFromBrowser // サーバーに送信
             })
         });
         const data = await res.json();
